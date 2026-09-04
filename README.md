@@ -2,13 +2,13 @@ FeeLock: Autonomous Subscription Intelligence & Defense
 
 **Status:** Conceptualization & Technical Architecture Phase (Pitch Ready)
 
-# The Problem
-Modern consumers suffer from severe "subscription fatigue," losing hundreds of dollars annually to "zombie subscriptions." This is driven by three systemic bottlenecks:
+The Problem
+* Modern consumers suffer from severe "subscription fatigue," losing hundreds of dollars annually to "zombie subscriptions." This is driven by three systemic bottlenecks:
 * **The Free-Trial Conversion Trap:** Automated, recurring charges triggered after time-limited trials expire without explicit secondary consent.
 * **Intentional Corporate Dark Patterns:** High-friction, obscured cancellation pipelines designed to keep users locked in.
 * **Silent Vendor Inflation:** Unannounced price hikes or currency adjustments that blend into background expenses.
 
-# The Solution
+The Solution
 * FeeLock is an active consumer defense architecture. We are shifting from passive expense tracking to automated enforcement to restore financial sovereignty to the digital consumer.
 
 Core Technical Features
