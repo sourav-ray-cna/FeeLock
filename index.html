@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FeeLock: stop paying for subscriptions you forgot about</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f5f8f7; --surface:#ffffff; --ink:#0d1f33; --muted:#52667a; --line:#d6e0e4;
+  --navy:#0d2a45; --navy-ink:#eaf6f1; --green:#14b37d; --green-soft:#dcf5ea; --red:#d6453d; --red-soft:#fde6e4;
+  --head:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#08141f; --surface:#0f2132; --ink:#e6f1ee; --muted:#9bb0bf; --line:#1f3548;
+    --navy:#12395a; --green-soft:#0f3a30; --red-soft:#3d1c1b;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#08141f; --surface:#0f2132; --ink:#e6f1ee; --muted:#9bb0bf; --line:#1f3548;
+  --navy:#12395a; --green-soft:#0f3a30; --red-soft:#3d1c1b;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+a{color:inherit}
+h1,h2,h3{font-family:var(--head);line-height:1.1;margin:0}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.logo{font-family:var(--head);font-weight:800;font-size:24px;text-decoration:none}
+.logo b{color:var(--green)}
+.btn{display:inline-block;background:var(--green);color:#04281c;font-weight:600;padding:13px 22px;border-radius:12px;text-decoration:none;border:2px solid var(--green)}
+.btn:hover{filter:brightness(1.07)}
+.btn:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.btn.alt{background:transparent;color:var(--ink);border-color:var(--line)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:36px 0 72px}
+.hero h1{font-size:clamp(38px,6vw,64px);font-weight:800;letter-spacing:-.02em}
+.hero p.lead{font-size:20px;color:var(--muted);max-width:30em;margin:20px 0 28px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.note{font-size:14px;color:var(--muted);margin-top:16px}
+/* phone */
+.phone{background:var(--navy);border-radius:34px;padding:16px;max-width:340px;margin:0 auto;box-shadow:0 24px 50px -22px rgba(5,25,45,.6)}
+.phone .top{color:var(--navy-ink);font-family:var(--head);font-weight:600;padding:6px 8px 14px;display:flex;justify-content:space-between}
+.phone .top span{color:var(--green)}
+.row{background:var(--surface);border-radius:16px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;gap:10px;align-items:center}
+.row strong{display:block;font-size:16px}
+.row small{color:var(--muted)}
+.tag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--red-soft);color:var(--red);white-space:nowrap}
+.tag.ok{background:var(--green-soft);color:#0b7a55}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag.ok{color:#5be0b2}}
+.card{background:linear-gradient(135deg,#0d3a5e,#0b2a45);border-radius:16px;padding:16px;color:var(--navy-ink);margin-top:4px}
+.card small{opacity:.75}
+.card .amt{font-family:var(--head);font-size:30px;font-weight:800}
+/* sections */
+section{padding:64px 0;border-top:1px solid var(--line)}
+section h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.01em;max-width:18em}
+section .sub{color:var(--muted);max-width:36em;margin:14px 0 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:34px}
+.feat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px}
+.feat h3{font-size:20px;margin-bottom:8px}
+.feat p{margin:0;color:var(--muted);font-size:16px}
+.steps{list-style:none;padding:0;margin:34px 0 0;display:grid;gap:14px;counter-reset:s}
+.steps li{counter-increment:s;display:flex;gap:16px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+.steps li::before{content:counter(s);flex:none;width:34px;height:34px;border-radius:50%;background:var(--green);color:#04281c;font-weight:800;display:grid;place-items:center;font-family:var(--head)}
+.steps b{display:block}
+.steps span{color:var(--muted)}
+.problem{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;margin-top:30px}
+.big{font-family:var(--head);font-weight:800;font-size:clamp(64px,12vw,110px);color:var(--red);line-height:.9}
+.who{margin-top:24px;color:var(--muted);max-width:40em}
+footer{border-top:1px solid var(--line);padding:34px 0 48px;color:var(--muted);font-size:15px}
+footer .contact{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;align-items:center}
+@media (max-width:820px){.hero{grid-template-columns:1fr;gap:36px;padding-bottom:48px}.problem{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav" aria-label="Main">
+    <a class="logo" href="#top">Fee<b>Lock</b></a>
+    <a class="btn alt" href="#contact">Contact</a>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <h1>Stop paying for subscriptions you forgot about.</h1>
+      <p class="lead">FeeLock finds your subscriptions, blocks surprise trial charges with capped burner cards, flags price hikes, and cancels what you no longer want.</p>
+      <div class="cta">
+        <a class="btn" href="https://github.com/sourav-ray-cna/FeeLock">Follow the build</a>
+        <a class="btn alt" href="#how">See how it works</a>
+      </div>
+      <p class="note">FeeLock is at the concept stage. The screens on this page are simulated for illustration.</p>
+    </div>
+    <div class="phone" aria-label="Simulated FeeLock app screen">
+      <div class="top">FeeLock <span>Active 3</span></div>
+      <div class="row"><div><strong>Netflix</strong><small>₹649 / month</small></div><span class="tag">Price up ₹50</span></div>
+      <div class="row"><div><strong>Spotify</strong><small>₹119 / month</small></div><span class="tag ok">On track</span></div>
+      <div class="row"><div><strong>ChatGPT Plus</strong><small>₹1,999 / month</small></div><span class="tag ok">On track</span></div>
+      <div class="card"><small>Trial burner card</small><div class="amt">₹100 cap</div><small>Expires in 7 days</small></div>
+    </div>
+  </header>
+
+  <section aria-labelledby="problem">
+    <h2 id="problem">Free trials are easy to start and easy to forget.</h2>
+    <div class="problem">
+      <div class="big">Nearly half</div>
+      <p class="sub" style="margin:0">Surveys of US consumers, including C+R Research, find that nearly half of people have been charged after forgetting to cancel a free trial. Prices creep up without notice, and cancelling often means digging through menus or making a phone call.</p>
+    </div>
+    <p class="who">We are building FeeLock for students and young professionals in Indian cities who juggle streaming, music, and AI tool subscriptions.</p>
+  </section>
+
+  <section aria-labelledby="features">
+    <h2 id="features">One app that watches, blocks, and cancels.</h2>
+    <div class="grid">
+      <div class="feat"><h3>Finds every subscription</h3><p>Connect Gmail or Outlook and FeeLock lists what you pay for, with each price and next billing date.</p></div>
+      <div class="feat"><h3>Burner cards for trials</h3><p>Sign up for a trial with a card that has a hard spending cap and a short expiry, so it cannot turn into a surprise charge.</p></div>
+      <div class="feat"><h3>Price-hike alerts</h3><p>FeeLock compares each new bill with your earlier ones and tells you when a price goes up.</p></div>
+      <div class="feat"><h3>Cancel in one tap</h3><p>Pick a subscription you want gone and an AI agent walks through the vendor's cancellation steps for you.</p></div>
+    </div>
+  </section>
+
+  <section id="how" aria-labelledby="howh">
+    <h2 id="howh">How it works</h2>
+    <ol class="steps">
+      <li><div><b>Connect your email</b><span>Sign in with Google or Outlook. FeeLock reads receipts to find subscriptions.</span></div></li>
+      <li><div><b>Review your list</b><span>See every active subscription, spot price increases, and pick what to keep.</span></div></li>
+      <li><div><b>Protect and cancel</b><span>Create a burner card for your next trial, and cancel unused subscriptions with one tap.</span></div></li>
+    </ol>
+  </section>
+
+  <footer id="contact">
+    <div class="contact">
+      <div><strong style="color:var(--ink)">Questions or feedback?</strong><br>Reach the team through the project on GitHub.</div>
+      <a class="btn" href="https://github.com/sourav-ray-cna/FeeLock">Contact us on GitHub</a>
+    </div>
+    <p style="margin-top:26px">© 2026 FeeLock. Concept stage, Amaravati, Andhra Pradesh, India.</p>
+  </footer>
+</div>
+</body>
+</html>
